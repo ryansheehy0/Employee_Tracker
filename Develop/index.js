@@ -29,10 +29,11 @@
 // TODO: Readme
   // Video of you using it
 
+
 const Question = require("./question.js")
 const Database = require("./database.js")
 
-const db = new Database({dbName: `employee_tracker`})
+const db = new Database(`employee_tracker`)
 const question = new Question()
 
 async function start(){
@@ -54,7 +55,7 @@ async function start(){
 
     switch(option) {
       case `View Departments`:
-        db.viewDepartments()
+        await db.viewDepartments()
         break
       case `View Roles`:
         db.viewRoles()
