@@ -1,15 +1,3 @@
-// Description: A terminal application which allows you to manage your departments, roles, and employees from a database.
-// TODO: List out options.
-  // What would you like to do?
-  // view all departments, view all roles, view all employees, add department, add  role, add  employee, update employee role, quit
-  // TODO: View all departments
-    // Table: id, name
-  // TODO: View all roles
-    // Table: id, title, department, salary
-  // TODO: View all employees
-    // Table: id, first_name, last_name, title, department, salary, manager
-  // TODO: Add a department
-    // Promt: New department name:
   // TODO: ADD role
     // New role name: , salary, department? (With list of departments)
   // TODO: Add employee
@@ -24,8 +12,7 @@
   // TODO: Delete departments, roles, and employees
   // TODO: Total utilized budget of a deparment
     //  the combined salaries of all employees in that department
-// TODO: Make SQL request async
-
+  // TODO: Add comment
 // TODO: Readme
   // Video of you using it
 
@@ -37,20 +24,22 @@ const db = new Database(`employee_tracker`)
 const question = new Question()
 
 async function start(){
-  question
-    .setType(`list`)
-    .setList([
-      `View Departments`,
-      `View Roles`,
-      `View Employees`,
-      `Add Role`,
-      `Add Employee`,
-      `Update Employee Role`,
-      `Quit`,
-    ])
-
   let quit = false
   while(!quit){
+
+    question
+      .setType(`list`)
+      .setList([
+        `View Departments`,
+        `View Roles`,
+        `View Employees`,
+        `Add Department`,
+        `Add Role`,
+        `Add Employee`,
+        `Update Employee Role`,
+        `Quit`,
+      ])
+      .setValidationFunction(() => true)
     let option = await question.askQuestion(`What would you like to do?`)
 
     switch(option) {
@@ -58,19 +47,41 @@ async function start(){
         await db.viewDepartments()
         break
       case `View Roles`:
-        db.viewRoles()
+        await db.viewRoles()
         break
       case `View Employees`:
-        db.viewEmployees()
+        await db.viewEmployees()
         break
-      case `Add Department`:
-        db.addDepartment()
+      case `Add Department`: {
+        const departments = await db.getDepartments()
+        question
+          .setType(`input`)
+          .setValidationFunction((input) => {
+            if(departments.includes(input)){
+              return `There's already a department named ${input}. Please give a new name.`
+            }
+            return true
+          })
+        const name = await question.askQuestion(`New department's name: `)
+        await db.addDepartment(name)
         break
-      case `Add Role`:
-        db.addRole()
+      }
+      case `Add Role`:{
+        question
+          .setType(`input`)
+          .setValidationFunction(() => true)
+        const name = await question.askQuestion(`New role's name: `)
+        const salary = await question.askQuestion(`New role's salary: `)
+        const departments = await db.getDepartments()
+        question
+          .setType(`list`)
+          .setList(departments)
+        const department = await question.askQuestion(`New role's department: `)
+        await db.addRole(name, salary, department)
         break
+      }
       case `Add Employee`:
-        db.addEmployee()
+        await db.addEmployee()
         break
       case `Update Employee Role`:
         db.updateEmployeeRole()

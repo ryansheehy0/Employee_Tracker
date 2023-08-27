@@ -3,18 +3,22 @@ const inquirer = require('inquirer')
 function Question(){
   let type = ``
   let list = []
+  let validationFunction
 
   // Setter methods
     this.setType = function(typeArg){type = typeArg; return this;}
     this.setList = function(listArg){list = listArg; return this;}
+    this.setValidationFunction = function(validation){validationFunction = validation; return this;}
 
   this.askQuestion = function(question){
     if(!type) throw Error(`Needs to setType.`)
+    if(!validationFunction) throw Error(`Needs to setValidationFunction.`)
 
     let prompt = {
       type: type,
       name: `name`,
       message: question,
+      validate: validationFunction,
       choices: type === `list` ? list : undefined,
     }
 

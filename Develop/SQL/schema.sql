@@ -5,7 +5,8 @@ use employee_tracker;
 create table department (
   id int not null auto_increment,
   name varchar(30) not null,
-  primary key (id)
+  primary key (id),
+  unique (name)
 );
 
 create table role (
@@ -14,7 +15,8 @@ create table role (
   salary decimal,
   department_id int,
   primary key (id),
-  foreign key (department_id) references department(id)
+  foreign key (department_id) references department(id),
+  unique (title)
 );
 
 create table employee (
