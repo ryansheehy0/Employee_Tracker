@@ -1,0 +1,27 @@
+function Get(db){
+  this.getDepartments = async function(){
+    const [results, ] = await db.query(`select id as value, name from department;`)
+    return results
+  }
+
+  this.getDepartmentNames = async function(){
+    const [results, ] = await db.query(`select name from department;`)
+    // Convert array of objects to array of strings
+    return results.reduce((departments, result) => {
+      departments.push(result.name)
+      return departments
+    }, [])
+  }
+
+  this.getRoles = async function(){
+    const [results, ] = await db.query(`select id as value, title as name from role;`)
+    return results
+  }
+
+  this.getEmployees = async function(){
+    const [results, ] = await db.query(`select id as value, concat(first_name, ' ', last_name) as name from employee;`)
+    return results
+  }
+}
+
+module.exports = Get
