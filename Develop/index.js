@@ -1,10 +1,3 @@
-  // TODO: ADD role
-    // New role name: , salary, department? (With list of departments)
-  // TODO: Add employee
-    // Employee's first name: , last name:, role(with list), manager(with list)
-  // TODO: Update employee role
-    // Select employee
-    // update new role
 // TODO: BONUS
   // TODO: Update emplyee manager
   // TODO: View emplyees by manger
@@ -14,6 +7,7 @@
     //  the combined salaries of all employees in that department
   // TODO: Add comment
 // TODO: Readme
+  // Content management system(CMS)
   // Video of you using it
 
 
@@ -53,7 +47,10 @@ async function start(){
         await db.viewEmployees()
         break
       case `Add Department`: {
-        const departments = await db.getDepartments()
+        // Get department names
+        const departments = await db.getDepartmentNames()
+
+        // Set questions
         question
           .setType(`input`)
           .setValidationFunction((input) => {
@@ -62,8 +59,10 @@ async function start(){
             }
             return true
           })
+
         const name = await question.askQuestion(`New department's name: `)
-        await db.addDepartment(name)
+        console.log(name)
+        //await db.addDepartment(name)
         break
       }
       case `Add Role`:{
@@ -76,16 +75,53 @@ async function start(){
         question
           .setType(`list`)
           .setList(departments)
-        const department = await question.askQuestion(`New role's department: `)
-        await db.addRole(name, salary, department)
+        const departmentId = await question.askQuestion(`New role's department: `)
+        console.log(departmentId)
+        await db.addRole(name, salary, departmentId)
         break
       }
-      case `Add Employee`:
-        await db.addEmployee()
+      case `Add Employee`: {
+        // Get names
+        question
+          .setType('input')
+          .setValidationFunction(() => true)
+        const first_name = await question.askQuestion(`New employee's first name: `)
+        const last_name = await question.askQuestion(`New employee's last name: `)
+
+        //  Get role
+        const roles = await db.getRoles()
+        question
+          .setType('list')
+          .setList(roles)
+        const roleId = await question.askQuestion(`New employee's role: `)
+
+        // Get manager
+        const employees = await db.getEmployees()
+        employees.push({name: 'None', value: 0})
+        question.setList(employees)
+        let managerId = await question.askQuestion(`New employee's manager: `)
+        if(managerId === 0)managerId = null
+
+        await db.addEmployee(first_name, last_name, roleId, managerId)
         break
-      case `Update Employee Role`:
-        db.updateEmployeeRole()
+      }
+      case `Update Employee Role`:{
+        // Get employee Id
+        const employees = await db.getEmployees()
+        question
+          .setType(`list`)
+          .setList(employees)
+        const employeeId = await question.askQuestion(`Employee: `)
+
+        // Get new role
+        const roles = await db.getRoles()
+        question
+          .setList(roles)
+        const roleId = await question.askQuestion(`New role: `)
+
+        await db.updateEmployeeRole(employeeId, roleId)
         break
+      }
       case `Quit`:
         quit = true
         break
