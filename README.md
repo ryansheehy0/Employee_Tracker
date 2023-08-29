@@ -23,7 +23,7 @@ First, clone the repo at `git@github.com:ryansheehy0/Employee_Tracker.git`.<br><
 ## Usage
 Just follow along with the questions and use the arrow keys(up and down) to scroll through any lists.
 
-[Video]()
+[Video](https://drive.google.com/file/d/1HW3VQFuIjwOzg1abYozXMwrH-ZM4z8HR/view?usp=sharing)
 
 The code can be found in the Develop folder. That start of the application is index.js
 ## Credits

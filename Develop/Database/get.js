@@ -30,6 +30,7 @@ function Get(db) {
       join department on role.department_id = department.id
       where department.name = '${departmentName}';
     `)
+    if(results[0].salary === null) return '0'
     return results[0].salary
   }
 
