@@ -1,5 +1,5 @@
-function Add(db){
-  this.addDepartment = async function(name){
+function Add(db) {
+  this.addDepartment = async function(name) {
     try{
       await db.query(`
         insert into department (name)

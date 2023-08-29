@@ -1,5 +1,5 @@
 function Update(db){
-  this.updateEmployeeRole = async function(employeeId, roleId){
+  this.updateEmployeeRole = async function(employeeId, roleId) {
     try{
       await db.query(`
         update employee
@@ -11,7 +11,7 @@ function Update(db){
     }
   }
 
-  this.closeConnection = function(){
+  this.closeConnection = async function() {
     db.end(err => {
       if(err) console.log(err)
     })

@@ -1,16 +1,16 @@
 const {printTable} = require("console-table-printer")
 
-function View(db){
+function View(db) {
   async function printQuery(query) {
     const [results, ] = await db.query(query)
     printTable(results)
   }
 
-  this.viewDepartments = async function(){
+  this.viewDepartments = async function() {
     await printQuery(`select * from department;`)
   }
 
-  this.viewRoles = async function(){
+  this.viewRoles = async function() {
     await printQuery(`
       select role.id, title, department.name as department, salary
       from role
@@ -18,7 +18,7 @@ function View(db){
     `)
   }
 
-  this.viewEmployees = async function(){
+  this.viewEmployees = async function() {
     await printQuery(`
       select e1.id,
             e1.first_name as 'first name',
@@ -34,6 +34,5 @@ function View(db){
     `)
   }
 }
-
 
 module.exports = View

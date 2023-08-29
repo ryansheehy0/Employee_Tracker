@@ -4,7 +4,7 @@ const Get = require("./get")
 const Add = require("./add")
 const Update = require("./update")
 
-function Database(dbName){
+function Database(dbName) {
   // Create connection to db
   const db = mysql.createPool({
         host: 'localhost',
@@ -13,27 +13,30 @@ function Database(dbName){
         database: dbName
       })
 
-  // Views
+  // Objects
   const view = new View(db)
+  const get = new Get(db)
+  const add = new Add(db)
+  const update = new Update(db)
+
+  // Views
   this.viewDepartments = view.viewDepartments
   this.viewRoles = view.viewRoles
   this.viewEmployees = view.viewEmployees
 
   // Gets
-  const get = new Get(db)
   this.getDepartments = get.getDepartments
   this.getDepartmentNames = get.getDepartmentNames
   this.getRoles = get.getRoles
   this.getEmployees = get.getEmployees
+  this.getTotalUtilizedBudgetOfDepartment = get.getTotalUtilizedBudgetOfDepartment
 
   // Adds
-  const add = new Add(db)
   this.addDepartment = add.addDepartment
   this.addRole = add.addRole
   this.addEmployee = add.addEmployee
 
   // Updates
-  const update = new Update(db)
   this.updateEmployeeRole = update.updateEmployeeRole
   this.closeConnection = update.closeConnection
 }
